@@ -1,14 +1,12 @@
 package by.test.selenium.google;
 
 import java.time.Duration;
-import java.util.NoSuchElementException;
-import java.util.function.Function;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.ui.FluentWait;
-import org.openqa.selenium.support.ui.Wait;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class HomePage extends Page {
 
@@ -27,23 +25,30 @@ public class HomePage extends Page {
 
 	public ResultPage getResultPage() {
 
-		Wait<WebDriver> wait = new FluentWait<WebDriver>(driver).withTimeout(Duration.ofSeconds(10))
-				.pollingEvery(Duration.ofSeconds(2)).ignoring(NoSuchElementException.class);
+		WebElement inputRequestElement = (new WebDriverWait(driver, Duration.ofSeconds(2)))
+				.until(ExpectedConditions.presenceOfElementLocated(By.xpath(INPUT_REQUEST_XPATH)));
 
-		WebElement inputRequestElement = wait.until(new Function<WebDriver, WebElement>() {
-			public WebElement apply(WebDriver driver) {
-				return driver.findElement(By.xpath(INPUT_REQUEST_XPATH));
-			}
-		});
-
+		/*
+		 * Wait<WebDriver> wait = new
+		 * FluentWait<WebDriver>(driver).withTimeout(Duration.ofSeconds(10))
+		 * .pollingEvery(Duration.ofSeconds(2)).ignoring(NoSuchElementException.
+		 * class);
+		 * 
+		 * WebElement inputRequestElement = wait.until(new Function<WebDriver,
+		 * WebElement>() { public WebElement apply(WebDriver driver) { return
+		 * driver.findElement(By.xpath(INPUT_REQUEST_XPATH)); } });
+		 */
 		inputRequestElement.sendKeys(REQUEST);
 		inputRequestElement.submit();
 
-		wait.until(new Function<WebDriver, WebElement>() {
-			public WebElement apply(WebDriver driver) {
-				return driver.findElement(By.xpath(RESULTS_XPATH));
-			}
-		});
+		(new WebDriverWait(driver, Duration.ofSeconds(2)))
+				.until(ExpectedConditions.presenceOfElementLocated(By.xpath(RESULTS_XPATH)));
+
+		/*
+		 * wait.until(new Function<WebDriver, WebElement>() { public WebElement
+		 * apply(WebDriver driver) { return
+		 * driver.findElement(By.xpath(RESULTS_XPATH)); } });
+		 */
 
 		return new ResultPage(driver);
 	}
