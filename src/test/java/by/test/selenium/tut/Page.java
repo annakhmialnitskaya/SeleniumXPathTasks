@@ -2,7 +2,7 @@ package by.test.selenium.tut;
 
 import org.openqa.selenium.WebDriver;
 
-public abstract class Page {
+public class Page {
 
 	protected final WebDriver driver;
 
